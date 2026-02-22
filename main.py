@@ -9,11 +9,11 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    background = pygame.image.load('tlo.png')
-    enemy_path = [(950, 10), (950, 300), (290, 300), (290, 790)]
+    background = pygame.image.load('Grafiki/tlo_poziom_1.png')
+    enemy_path = [(770, 10), (770, 370), (260, 370), (260, 790)]
 
-    e1 = Enemy(enemy_path, 1, 20, 20, "red")
-    t1 = Tower(50, "blue", 100, 300, 200)
+    e1 = Enemy(enemy_path, 1, 100, 20, 20, "red")
+    t1 = Tower(50, "blue", 100, 10, 1000,300, 300)
 
     while running:
         for event in pygame.event.get():
@@ -25,7 +25,7 @@ def main():
         t1.draw(screen)
         e1.draw(screen)
         distance = math.hypot(e1.x - t1.x_pos, e1.y - t1.y_pos) - t1.radius
-        t1.atack(screen, distance, e1.x, e1.y)
+        t1.attack(screen, e1, distance)
 
         (pygame.display.flip())
         clock.tick(60)
