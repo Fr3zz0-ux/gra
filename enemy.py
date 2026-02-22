@@ -4,7 +4,7 @@ import math
 class Enemy:
 
     # konstruktor
-    def __init__(self, path, speed, width, height, color):
+    def __init__(self, path, speed, health, width, height, color):
 
         # pozycja itd
         self.path = path
@@ -16,6 +16,8 @@ class Enemy:
 
         # ustawiamy wspolrzedne na pierwsze rzeczy z trasy
         self.x, self.y = self.path[self.goal_index]
+
+        self.health = health
 
         # wyglad
         self.width = width
@@ -45,6 +47,10 @@ class Enemy:
             self.y = goal_y
 
             self.goal_index += 1
+
+    def take_damage(self, damage):
+        if self.health > 0:
+            self.health -= damage
 
     # funkcja rysujaca przeciwnika
     def draw(self, screen):
