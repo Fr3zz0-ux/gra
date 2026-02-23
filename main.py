@@ -12,8 +12,8 @@ def main():
     background = pygame.image.load('Grafiki/tlo_poziom_1.png')
     enemy_path = [(770, 10), (770, 370), (260, 370), (260, 790)]
 
-    e1 = Enemy(enemy_path, 1, 100, 20, 20, "red")
-    t1 = Tower(50, "blue", 100, 10, 1000,300, 300)
+    e1 = Enemy(enemy_path, 1, 70, 20, 20, "red")
+    t1 = Tower(50, "blue", 100, 15, 1000,300, 300)
 
     while running:
         for event in pygame.event.get():
@@ -24,6 +24,7 @@ def main():
         screen.blit(background, (0, 0))
         t1.draw(screen)
         e1.draw(screen)
+
         distance = math.hypot(e1.x - t1.x_pos, e1.y - t1.y_pos) - t1.radius
         t1.attack(screen, e1, distance)
 
