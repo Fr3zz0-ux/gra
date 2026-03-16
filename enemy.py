@@ -57,15 +57,12 @@ class Enemy:
 
     # funkcja zadajaca obrazenia
     def take_damage(self, damage):
-        if self.health <= 0:
-            self.is_alive = False
-        else:
             self.health -= damage
 
     # funkcja rysujaca przeciwnika i jego zycie
     def draw(self, screen):
 
-        if self.is_alive is not True:
+        if self.is_alive is not True or self.health <= 0:
             return
 
         pygame.draw.rect(screen, self.color, [self.x, self.y, self.width, self.height])
