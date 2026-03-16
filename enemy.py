@@ -32,8 +32,8 @@ class Enemy:
     # funkcja do przemieszczania sie przeciwnika
     def move_to_checkpoint(self):
 
-        if self.goal_index == len(self.path):
-            return
+        if self.goal_index >= len(self.path):
+            return True
 
         goal_x, goal_y = self.path[self.goal_index]
 
@@ -52,6 +52,8 @@ class Enemy:
             self.y = goal_y
 
             self.goal_index += 1
+
+        return False
 
     # funkcja zadajaca obrazenia
     def take_damage(self, damage):
