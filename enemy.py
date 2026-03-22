@@ -6,7 +6,7 @@ import math
 class Enemy:
 
     # konstruktor
-    def __init__(self, path, speed, health, width, height, color):
+    def __init__(self, path, speed, health, reward, width, height, color):
 
         # pozycja itd
         self.path = path
@@ -18,6 +18,9 @@ class Enemy:
 
         # ustawiamy wspolrzedne na pierwsze rzeczy z trasy
         self.x, self.y = self.path[self.goal_index]
+
+
+        self.reward = reward
 
         # zarzadzanie zyciem
         self.health = health
@@ -81,3 +84,7 @@ class Enemy:
 
         pygame.draw.rect(screen, "red", [bar_x, bar_y, bar_width, bar_height])
         pygame.draw.rect(screen, "green", [bar_x, bar_y, max(0, current_bar_width), bar_height])
+
+class ClassicEnemy(Enemy):
+    def __init__(self, path):
+        super().__init__(path, speed = 1, health = 70, reward = 10, width = 20, height = 20, color ="black")

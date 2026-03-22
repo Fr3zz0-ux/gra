@@ -8,6 +8,9 @@ class Player:
         self.health = 100
 
 
+    def add_money(self, amount):
+        self.money += amount
+
     def show_health(self,screen):
 
         bar_width = 200
@@ -20,3 +23,11 @@ class Player:
 
     def lose_health(self, damage):
         self.health -= damage
+
+
+    def draw_money(self, screen, text_col):
+
+        font = pygame.font.SysFont("Arial", 20)
+
+        img = font.render(str(self.money), True, text_col)
+        screen.blit(img, [1040, 60])
