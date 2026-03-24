@@ -4,12 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbf426cd-5c74-4d0a-b8ee-b2eee747b73f" name="Changes" comment="- naprawiono smierc przeciwnika od wiezy&#10;- dodano mechanike fali tower defense">
-      <change afterPath="$PROJECT_DIR$/ClassicEnemy.py" afterDir="false" />
+    <list default="true" id="cbf426cd-5c74-4d0a-b8ee-b2eee747b73f" name="Changes" comment="- dodanie pieniedzy i nagrody za zabicie wroga">
+      <change afterPath="$PROJECT_DIR$/Assets/Bullet_Cannon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Bullet_MG.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Cannon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Cannon2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Cannon3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/MG.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/MG2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/MG3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Missile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Missile_Launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Missile_Launcher2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Missile_Launcher3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Tower.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Grafiki/tlo do poziomu.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/tlo do poziomu.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Grafiki/tlo_poziom_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/tlo_poziom_1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/towers.py" beforeDir="false" afterPath="$PROJECT_DIR$/towers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +85,7 @@
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/mateusz/PycharmProjects/graTowerDefense/Assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -82,11 +96,16 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Assets" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.30387.173" />
-        <option value="bundled-python-sdk-4762d8aabb82-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.173" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>
@@ -107,7 +126,8 @@
       <workItem from="1771848490386" duration="609000" />
       <workItem from="1771852527331" duration="3093000" />
       <workItem from="1773607650339" duration="4945000" />
-      <workItem from="1774212061840" duration="3067000" />
+      <workItem from="1774212061840" duration="6009000" />
+      <workItem from="1774368227552" duration="4253000" />
     </task>
     <task id="LOCAL-00001" summary="dodano&#10;-zycie&#10;-otrzymywanie obrazen">
       <option name="closed" value="true" />
@@ -157,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773654844550</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="- dodanie pieniedzy i nagrody za zabicie wroga">
+      <option name="closed" value="true" />
+      <created>1774217460774</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1774217460774</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,12 +209,13 @@
     <MESSAGE value="-dodanie smierci wroga" />
     <MESSAGE value="- dodanie mechaniki dojscia przeciwnika do konca i zadaniu obrazen graczowi&#10;&#10;- i jakies inne pierdoly ale nie pamietam bo dawno tu nie zagladalem" />
     <MESSAGE value="- naprawiono smierc przeciwnika od wiezy&#10;- dodano mechanike fali tower defense" />
-    <option name="LAST_COMMIT_MESSAGE" value="- naprawiono smierc przeciwnika od wiezy&#10;- dodano mechanike fali tower defense" />
+    <MESSAGE value="- dodanie pieniedzy i nagrody za zabicie wroga" />
+    <option name="LAST_COMMIT_MESSAGE" value="- dodanie pieniedzy i nagrody za zabicie wroga" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/graTowerDefense$player.coverage" NAME="player Coverage Results" MODIFIED="1774217084936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/graTowerDefense$enemy.coverage" NAME="enemy Coverage Results" MODIFIED="1771805470334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/graTowerDefense$main.coverage" NAME="main Coverage Results" MODIFIED="1774217372417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/graTowerDefense$towers.coverage" NAME="towers Coverage Results" MODIFIED="1771801924471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/graTowerDefense$main.coverage" NAME="main Coverage Results" MODIFIED="1774373147134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/graTowerDefense$towers.coverage" NAME="towers Coverage Results" MODIFIED="1774372690245" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

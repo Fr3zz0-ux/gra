@@ -3,7 +3,7 @@ from logging import disable
 import pygame
 import math
 from enemy import Enemy, ClassicEnemy
-from towers import Tower
+from towers import Tower, Cannon
 from player import Player
 
 def main():
@@ -12,15 +12,16 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    background = pygame.image.load('Grafiki/tlo_poziom_1.png')
+    background = pygame.image.load('Assets/tlo_poziom_1.png')
 
     enemy_path = [(770, 10), (770, 370), (260, 370), (260, 790)]
     enemies_count = 10
     enemies = []
     last_spawn = pygame.time.get_ticks()
 
+    towers = []
+
     player = Player(0)
-    t1 = Tower(50, "blue", 100, 30, 400,300, 240)
 
     while running:
 
@@ -39,22 +40,28 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x_pos, y_pos = pygame.mouse.get_pos()
+                towers.append(Cannon(x_pos, y_pos))
+
+
 
         screen.blit(background, (0, 0))
 
-        t1.draw(screen)
+        for tower in towers:
+            tower.draw(screen)
 
         for enemy in enemies:
             enemy.move_to_checkpoint()
             enemy.draw(screen)
-            distance = math.hypot(enemy.x - t1.x_pos, enemy.y - t1.y_pos) - t1.radius
-            t1.attack(screen, enemy, distance)
+            for tower in towers:
+                distance = math.hypot(enemy.x - tower.x_pos, enemy.y - tower.y_pos)
+                tower.attack(screen, enemy, distance)
             if enemy.health <= 0:
                 enemies.remove(enemy)
                 player.add_money(enemy.reward)
             if enemy.move_to_checkpoint() == True:
                 player.lose_health(10)
-                print(player.health)
                 enemies.remove(enemy)
 
         pygame.draw.rect(screen, "purple", [900, 0, 500, 800])
