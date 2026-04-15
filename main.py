@@ -1,5 +1,3 @@
-from logging import disable
-
 import pygame
 import math
 from enemy import Enemy, ClassicEnemy
@@ -20,6 +18,7 @@ def main():
     last_spawn = pygame.time.get_ticks()
 
     towers = []
+    bullets = []
 
     player = Player(0)
 
@@ -54,19 +53,26 @@ def main():
         for enemy in enemies:
             enemy.move_to_checkpoint()
             enemy.draw(screen)
+
             for tower in towers:
                 distance = math.hypot(enemy.x - tower.x_pos, enemy.y - tower.y_pos)
-                tower.attack(screen, enemy, distance)
+                tower.attack(screen, enemy, distance, bullets)
+
             if enemy.health <= 0:
                 enemies.remove(enemy)
                 player.add_money(enemy.reward)
-            if enemy.move_to_checkpoint() == True:
+            elif enemy.move_to_checkpoint() == True:
                 player.lose_health(10)
                 enemies.remove(enemy)
+        for bullet in bullets:
+            bullet.update()
+            bullet.draw(screen)
+            if bullet.hit == True:
+                bullets.remove(bullet)
 
         pygame.draw.rect(screen, "purple", [900, 0, 500, 800])
         player.draw_money(screen, (0, 0, 0))
-        player.show_health(screen)
+        player.show_health(screen, (0, 0, 0))
 
         (pygame.display.flip())
         clock.tick(60)
