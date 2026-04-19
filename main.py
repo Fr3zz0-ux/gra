@@ -64,15 +64,18 @@ def obslugaEventow(ui_Buttons, player, towers, waves_data):
                                     player.trigger_notification("Pauza: WYŁĄCZONA")
 
                             elif button.name == "StartWave":
-                                if player.current_wave < len(waves_data):
-                                    wave_info = waves_data[player.current_wave]
-                                    player.active_waves.append({
-                                        "info": wave_info,
-                                        "remaining": wave_info["count"],
-                                        "last_spawn": 0
-                                    })
-                                    player.current_wave += 1
-                                    player.trigger_notification(f"Fala {player.current_wave} nadeszła!")
+                                if len(player.active_waves) < 2:
+                                    if player.current_wave < len(waves_data):
+                                        wave_info = waves_data[player.current_wave]
+                                        player.active_waves.append({
+                                            "info": wave_info,
+                                            "remaining": wave_info["count"],
+                                            "last_spawn": 0
+                                        })
+                                        player.current_wave += 1
+                                        player.trigger_notification(f"Fala {player.current_wave} nadeszla!")
+                                else:
+                                    player.trigger_notification("Max 2 aktywne fale!")
                             
                             break
                         
@@ -245,11 +248,15 @@ def main():
             start_btn_text = "Koniec Fal"
             start_btn_color = (150, 150, 150)
         else:
-            if len(player.active_waves) > 0:
+            if len(player.active_waves) >= 2:
+                start_btn_text = "Max Fal"
+                start_btn_color = (150, 150, 150)
+            elif len(player.active_waves) > 0:
                 start_btn_text = "Dodaj Falę"
+                start_btn_color = (255, 255, 255)
             else:
                 start_btn_text = "Start Fali"
-            start_btn_color = (255, 255, 255)
+                start_btn_color = (255, 255, 255)
             
         start_img = fontUpgrade.render(start_btn_text, True, start_btn_color)
         start_rect = start_img.get_rect(center=(1352, 345))
