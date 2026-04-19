@@ -64,9 +64,15 @@ def obslugaEventow(ui_Buttons, player, towers, waves_data):
                                     player.trigger_notification("Pauza: WYŁĄCZONA")
 
                             elif button.name == "StartWave":
-                                if not player.wave_in_progress and player.current_wave < len(waves_data):
-                                    player.wave_in_progress = True
-                                    player.enemies_to_spawn = waves_data[player.current_wave]["count"]
+                                if player.current_wave < len(waves_data):
+                                    wave_info = waves_data[player.current_wave]
+                                    player.active_waves.append({
+                                        "info": wave_info,
+                                        "remaining": wave_info["count"],
+                                        "last_spawn": 0
+                                    })
+                                    player.current_wave += 1
+                                    player.trigger_notification(f"Fala {player.current_wave} nadeszła!")
                             
                             break
                         
@@ -156,18 +162,14 @@ def main():
         game_time += delta_time
         current_time = game_time
 
-        if player.wave_in_progress and player.enemies_to_spawn > 0 and current_time - last_spawn > 1000:
-            wave_info = waves_data[player.current_wave]
-            new_enemy = WaveEnemy(enemy_path, wave_info["speed"], wave_info["health"], wave_info["reward"])
-            enemies.append(new_enemy)
-
-            player.enemies_to_spawn -= 1
-            last_spawn = current_time
-
-        if player.wave_in_progress and player.enemies_to_spawn == 0 and len(enemies) == 0:
-            player.wave_in_progress = False
-            player.current_wave += 1
-            player.trigger_notification(f"Koniec fali {player.current_wave}!")
+        for wave in player.active_waves[:]:
+            if wave["remaining"] > 0 and current_time - wave["last_spawn"] > 1000:
+                new_enemy = WaveEnemy(enemy_path, wave["info"]["speed"], wave["info"]["health"], wave["info"]["reward"])
+                enemies.append(new_enemy)
+                wave["remaining"] -= 1
+                wave["last_spawn"] = current_time
+            if wave["remaining"] <= 0:
+                player.active_waves.remove(wave)
 
         running = obslugaEventow(ui_Buttons, player, towers, waves_data)
 
@@ -235,19 +237,18 @@ def main():
 
         # Tekst o aktualnej fali
         wave_font = pygame.font.SysFont("Poppins", 30)
-        current_wave_display = min(player.current_wave + 1, len(waves_data))
-        wave_text = wave_font.render(f"Fala: {current_wave_display}/{len(waves_data)}", True, (255, 255, 255))
+        wave_text = wave_font.render(f"Fala: {player.current_wave}/{len(waves_data)}", True, (255, 255, 255))
         screen.blit(wave_text, (1310, 20))
 
         # Tekst na przycisku startu fali
         if player.current_wave >= len(waves_data):
-            start_btn_text = "Koniec Gry"
-            start_btn_color = (150, 150, 150)
-        elif player.wave_in_progress:
-            start_btn_text = "Fala Trwa..."
+            start_btn_text = "Koniec Fal"
             start_btn_color = (150, 150, 150)
         else:
-            start_btn_text = "Start Fali"
+            if len(player.active_waves) > 0:
+                start_btn_text = "Dodaj Falę"
+            else:
+                start_btn_text = "Start Fali"
             start_btn_color = (255, 255, 255)
             
         start_img = fontUpgrade.render(start_btn_text, True, start_btn_color)

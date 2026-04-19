@@ -16,8 +16,7 @@ class Player:
         self.is_paused = False
 
         self.current_wave = 0
-        self.wave_in_progress = False
-        self.enemies_to_spawn = 0
+        self.active_waves = []
 
     def add_money(self, amount):
         self.money += amount
