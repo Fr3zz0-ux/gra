@@ -146,3 +146,11 @@ class Bullet():
 class Cannon(Tower):
     def __init__(self, x_pos, y_pos):
         super().__init__(asset_path = "Assets/Cannon.png", scale_x= 35, scale_y = 65 ,towerRange = 200, damage = 30, cooldown = 400, x_pos = x_pos, y_pos = y_pos)
+
+class Machinegun(Tower):
+    def __init__(self, x_pos, y_pos):
+        super().__init__(asset_path = "Assets/Machinegun.png", scale_x= 35, scale_y = 65 ,towerRange = 200, damage = 30, cooldown = 400, x_pos = x_pos, y_pos = y_pos)
+
+class Missile_Launcher(Tower):
+    def __init__(self, x_pos, y_pos):
+        super().__init__(asset_path = "Assets/Missle_Launcher.png", scale_x= 35, scale_y = 65 ,towerRange = 200, damage = 30, cooldown = 400, x_pos = x_pos, y_pos = y_pos)

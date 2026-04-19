@@ -1,11 +1,50 @@
 import pygame
 import math
 from enemy import Enemy, ClassicEnemy
-from towers import Tower, Cannon
+from towers import Tower, Cannon, Machinegun, Missile_Launcher
 from player import Player
+from button import Button
 
 
+def obslugaEventow(ui_Buttons, player, towers):
+    for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1: # Tylko lewy przycisk myszy
+                    mouse_pos = event.pos
+                    clickedOnPanel = False
+                    
+                    for button in ui_Buttons:
+                        
+                        if button.is_clicked(mouse_pos):
+                            clickedOnPanel = True
 
+                            if button.name == "Cannon":
+                                player.selectedButton = Cannon
+
+                            elif button.name == "Machinegun":
+                                player.selectedButton = Machinegun
+
+                            elif button.name == "Missle_Launcher":
+                                player.selectedButton = Missile_Launcher
+
+                            elif button.name == "UpgradeTower":
+                                print("Wybrano upgrade tower")
+
+                            elif button.name == "FastForward":
+                                print("Wybrano fast forward")
+
+                            elif button.name == "Pause":
+                                print("Wybrano pause")
+                            
+                            break
+                        
+                    if not clickedOnPanel and mouse_pos[0] < 1200:
+                        if player.selectedButton is not None:
+                            towers.append(player.selectedButton(mouse_pos[0], mouse_pos[1]))
+                            player.selectedButton = None
+    return True
 
 
 def main():
@@ -28,6 +67,15 @@ def main():
       (1057, 597), (1073, 568), (1078, 530), (1054, 497), (1021, 480), (982, 468), (932, 453), (892, 440), (866, 423), (846, 400), (845, 374), (868, 348), (911, 333), (952, 318), (985, 315), (1014, 301),
        (1039, 290), (1058, 280), (1075, 270)]
 
+    ui_Buttons = [
+        Button(1220, 392, 80, 90, "Cannon"),
+        Button(1312, 392, 80, 90, "Machinegun"),
+        Button(1405, 392, 80, 90, "Missle_Launcher"),
+        Button(1234, 502, 236, 54, "UpgradeTower"),
+        Button(1247, 659, 100, 100, "FastForward"),
+        Button(1362, 659, 100, 100, "Pause")
+    ]
+
     enemies_count = 50
     enemies = []
     last_spawn = pygame.time.get_ticks()
@@ -48,16 +96,7 @@ def main():
             enemies_count -= 1
             last_spawn = current_time
 
-
-
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x_pos, y_pos = pygame.mouse.get_pos()
-                #print(x_pos, y_pos)
-                towers.append(Cannon(x_pos, y_pos))
+        running = obslugaEventow(ui_Buttons, player, towers)
 
         screen.blit(scaledBackground, (0, 0))
 
@@ -86,8 +125,11 @@ def main():
 
         # Panel boczny
         screen.blit(scaledPasekPrawo, (1200 , 0))
-        player.draw_money(screen, (0, 0, 0))
-        player.show_health(screen, (0, 0, 0))
+        player.draw_money(screen, (255, 255, 255))
+        player.show_health(screen, (255, 255, 255))
+        
+        for btn in ui_Buttons:
+            btn.draw_debug(screen)
 
         (pygame.display.flip())
         clock.tick(60)
