@@ -54,20 +54,21 @@ class Tower:
                     self.target = None
 
         if self.target is None:
-            closest_enemy = None
+            best_enemy = None
             min_distance = self.range + 1
 
             for enemy in enemies_list:
-                enemy_center_x = enemy.x + (enemy.width / 2)
-                enemy_center_y = enemy.y + (enemy.height / 2)
+                if enemy.health > 0:
+                    enemy_center_x = enemy.x + (enemy.width / 2)
+                    enemy_center_y = enemy.y + (enemy.height / 2)
 
-                distance = math.hypot(enemy_center_x - self.x_pos, enemy_center_y - self.y_pos)
+                    distance = math.hypot(enemy_center_x - self.x_pos, enemy_center_y - self.y_pos)
 
-                if distance <= self.range and distance < min_distance:
-                    closest_enemy = enemy
-                    min_distance = distance
+                    if distance <= self.range and distance < min_distance:
+                        best_enemy = enemy
+                        min_distance = distance
 
-            self.target = closest_enemy
+            self.target = best_enemy
 
         if self.target is not None:
             self.is_attacking = True
@@ -144,4 +145,4 @@ class Bullet():
 
 class Cannon(Tower):
     def __init__(self, x_pos, y_pos):
-        super().__init__(asset_path = "Assets/Cannon.png", scale_x= 35, scale_y = 65 ,towerRange = 100, damage = 30, cooldown = 400, x_pos = x_pos, y_pos = y_pos)
+        super().__init__(asset_path = "Assets/Cannon.png", scale_x= 35, scale_y = 65 ,towerRange = 200, damage = 30, cooldown = 400, x_pos = x_pos, y_pos = y_pos)

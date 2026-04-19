@@ -38,21 +38,17 @@ class Enemy:
 
         goal_x, goal_y = self.path[self.goal_index]
 
-        if self.x < goal_x:
-            self.x += self.speed
-        elif self.x > goal_x:
-            self.x -= self.speed
+        dx = goal_x - self.x
+        dy = goal_y - self.y
+        distance = math.hypot(dx, dy)
 
-        if self.y < goal_y:
-            self.y += self.speed
-        elif self.y > goal_y:
-            self.y -= self.speed
-
-        if abs(self.x - goal_x) <= self.speed and abs(self.y - goal_y) <= self.speed:
+        if distance <= self.speed:
             self.x = goal_x
             self.y = goal_y
-
             self.goal_index += 1
+        else:
+            self.x += (dx / distance) * self.speed
+            self.y += (dy / distance) * self.speed
 
         return False
 
@@ -85,4 +81,4 @@ class Enemy:
 
 class ClassicEnemy(Enemy):
     def __init__(self, path):
-        super().__init__(path, speed = 1, health = 70, reward = 10, width = 20, height = 20, color ="black")
+        super().__init__(path, speed = 3, health = 70, reward = 10, width = 20, height = 20, color ="black")

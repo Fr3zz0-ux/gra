@@ -3,18 +3,9 @@ import math
 
 
 class Player:
-    def __init__(self, money):
+    def __init__(self):
 
-        # Przygotowanie obrazka zycia
-        original_health = pygame.image.load("Assets/health.png")
-        self.health_image = pygame.transform.scale(original_health, (60, 60))
-
-        # Przygotowanie obrazka pieniedzy
-        original_money = pygame.image.load("Assets/money.png")
-        self.money_image = pygame.transform.scale(original_money, (60, 60))
-
-
-        self.money = money
+        self.money = 0
         self.health = 100
 
 
@@ -23,21 +14,18 @@ class Player:
 
     def show_health(self,screen, text_col):
 
-        screen.blit(self.health_image, [930, 40])
-
-        font = pygame.font.SysFont("Arial", 40)
+        font = pygame.font.SysFont("Poppins", 50, bold = True)
 
         img = font.render(str(self.health), True, text_col)
-        screen.blit(img, [1010, 50])
+        screen.blit(img, [1355, 115])
 
     def lose_health(self, damage):
         self.health -= damage
 
 
     def draw_money(self, screen, text_col):
-        screen.blit(self.money_image, [930, 130])
 
-        font = pygame.font.SysFont("Arial", 40)
+        font = pygame.font.SysFont("Poppins", 50, bolf = True)
 
         img = font.render(str(self.money), True, text_col)
-        screen.blit(img, [1010, 140])
+        screen.blit(img, [1355, 262])
