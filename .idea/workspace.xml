@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbf426cd-5c74-4d0a-b8ee-b2eee747b73f" name="Changes" comment="- assety zrobienie wiezy" />
+    <list default="true" id="cbf426cd-5c74-4d0a-b8ee-b2eee747b73f" name="Changes" comment="- assety zrobienie wiezy">
+      <change afterPath="$PROJECT_DIR$/Assets/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/towers.py" beforeDir="false" afterPath="$PROJECT_DIR$/towers.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +17,7 @@
   </component>
   <component name="EmbeddingIndexingInfo">
     <option name="cachedIndexableFilesCount" value="27" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -111,6 +117,10 @@
       <workItem from="1774212061840" duration="6009000" />
       <workItem from="1774368227552" duration="8318000" />
       <workItem from="1776284814394" duration="23000" />
+      <workItem from="1776290596503" duration="347000" />
+      <workItem from="1776290989638" duration="25000" />
+      <workItem from="1776291019756" duration="21000" />
+      <workItem from="1776374038856" duration="3726000" />
     </task>
     <task id="LOCAL-00001" summary="dodano&#10;-zycie&#10;-otrzymywanie obrazen">
       <option name="closed" value="true" />
@@ -184,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776284834629</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="- assety zrobienie wiezy">
+      <option name="closed" value="true" />
+      <created>1776290600992</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1776290600992</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,10 +230,20 @@
     <MESSAGE value="- assety zrobienie wiezy" />
     <option name="LAST_COMMIT_MESSAGE" value="- assety zrobienie wiezy" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/graTowerDefense$player.coverage" NAME="player Coverage Results" MODIFIED="1774375030767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/graTowerDefense$enemy.coverage" NAME="enemy Coverage Results" MODIFIED="1771805470334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/graTowerDefense$main.coverage" NAME="main Coverage Results" MODIFIED="1774384202836" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/graTowerDefense$towers.coverage" NAME="towers Coverage Results" MODIFIED="1774383637774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/graTowerDefense$main.coverage" NAME="main Coverage Results" MODIFIED="1776597914437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/graTowerDefense$towers.coverage" NAME="towers Coverage Results" MODIFIED="1776375920546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

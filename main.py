@@ -56,7 +56,7 @@ def main():
 
             for tower in towers:
                 distance = math.hypot(enemy.x - tower.x_pos, enemy.y - tower.y_pos)
-                tower.attack(screen, enemy, distance, bullets)
+                tower.attack(enemies, bullets)
 
             if enemy.health <= 0:
                 enemies.remove(enemy)

@@ -7,8 +7,9 @@ class Tower:
 
         # Przygotowanie lufy
         self.original_top = pygame.image.load(asset_path)
-        self.top_image = pygame.transform.scale(self.original_top, (scale_x, scale_y))
-        self.top_rect = self.top_image.get_rect(midbottom = (x_pos, y_pos + 20))
+        self.scaled_top = pygame.transform.scale(self.original_top, (scale_x, scale_y))
+        self.top_rect = self.scaled_top.get_rect(center = (x_pos, y_pos -  15))
+        self.top_image = self.scaled_top
 
         # Przygotowanie obrazka
         self.original_base = pygame.image.load("Assets/Tower.png")
@@ -29,6 +30,8 @@ class Tower:
         self.cooldown = cooldown
         self.x_pos = x_pos
         self.y_pos = y_pos
+        self.is_attacking = False
+        self.target = None
 
     def draw(self, screen):
         ### Pomocnicze do rysowania zasiegu wiezy ###
@@ -37,21 +40,69 @@ class Tower:
         screen.blit(self.base_image, self.base_rect)
         screen.blit(self.top_image, self.top_rect)
 
-    def attack(self, screen, enemy, distance, bullets_list):
+    def attack(self, enemies_list, bullets_list):
         current_time = pygame.time.get_ticks()
 
-        if distance <= self.range:
+        if self.target is not None:
+            if not self.target.is_alive or self.target.health <= 0 or self.target not in enemies_list:
+                self.target = None
+            else:
+                target_center_x = self.target.x + (self.target.width / 2)
+                target_center_y = self.target.y + (self.target.height / 2)
+                distance = math.hypot(target_center_x - self.x_pos, target_center_y - self.y_pos)
+                if distance > self.range:
+                    self.target = None
+
+        if self.target is None:
+            closest_enemy = None
+            min_distance = self.range + 1
+
+            for enemy in enemies_list:
+                enemy_center_x = enemy.x + (enemy.width / 2)
+                enemy_center_y = enemy.y + (enemy.height / 2)
+
+                distance = math.hypot(enemy_center_x - self.x_pos, enemy_center_y - self.y_pos)
+
+                if distance <= self.range and distance < min_distance:
+                    closest_enemy = enemy
+                    min_distance = distance
+
+            self.target = closest_enemy
+
+        if self.target is not None:
+            self.is_attacking = True
+
+            target_center_x = self.target.x + (self.target.width / 2)
+            target_center_y = self.target.y + (self.target.height / 2)
+
+            dx = target_center_x - self.x_pos
+            dy = target_center_y - self.y_pos
+            angle_rad = math.atan2(dy, dx)
+            angle_deg = math.degrees(-angle_rad) - 90
+
+            self.top_image = pygame.transform.rotate(self.scaled_top, angle_deg)
+
+            base_center = (self.x_pos, self.y_pos)
+            offset = pygame.math.Vector2(0, -15)
+            rotated_offset = offset.rotate(-angle_deg)
+
+            new_center_x = base_center[0] + rotated_offset.x
+            new_center_y = base_center[1] + rotated_offset.y
+
+            self.top_rect = self.top_image.get_rect(center=(new_center_x, new_center_y))
+
             if current_time - self.last_attack_time >= self.cooldown:
                 new_bullet = Bullet(
                     image=self.bullet_image,
-                    start_x=self.top_rect.centerx,
-                    start_y=self.top_rect.centery,
-                    target_enemy=enemy,
+                    start_x=self.x_pos,
+                    start_y=self.y_pos,
+                    target_enemy=self.target,
                     damage=self.damage
                 )
                 bullets_list.append(new_bullet)
-
                 self.last_attack_time = current_time
+        else:
+            self.is_attacking = False
 
 class Bullet():
     def __init__(self, image, start_x, start_y, target_enemy, damage):
@@ -70,7 +121,7 @@ class Bullet():
     def update(self):
 
         # Pobieramy pozycje wroga
-        target_position = pygame.math.Vector2(self.target.x, self.target.y)
+        target_position = pygame.math.Vector2(self.target.x + (self.target.width / 2), self.target.y + (self.target.height / 2))
 
         # Liczymy wektor kierunku
         direction = target_position - self.pos
