@@ -1,17 +1,23 @@
 import pygame
 import math
-from enemy import Enemy, ClassicEnemy
+from enemy import Enemy, ClassicEnemy, WaveEnemy
 from towers import Tower, Cannon, Machinegun, Missile_Launcher
 from player import Player
 from button import Button
 
 
-def obslugaEventow(ui_Buttons, player, towers):
+def obslugaEventow(ui_Buttons, player, towers, waves_data):
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
+            if event.type == pygame.MOUSEMOTION:
+                if player.preview_tower is not None:
+                    player.preview_tower.update_position(event.pos[0], event.pos[1])
+
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1: # Tylko lewy przycisk myszy
+                if event.button == 3: # Prawy przycisk myszy - anulowanie
+                    player.preview_tower = None
+                elif event.button == 1: # Tylko lewy przycisk myszy
                     mouse_pos = event.pos
                     clickedOnPanel = False
                     
@@ -21,29 +27,66 @@ def obslugaEventow(ui_Buttons, player, towers):
                             clickedOnPanel = True
 
                             if button.name == "Cannon":
-                                player.selectedButton = Cannon
+                                player.preview_tower = Cannon(mouse_pos[0], mouse_pos[1])
 
                             elif button.name == "Machinegun":
-                                player.selectedButton = Machinegun
+                                player.preview_tower = Machinegun(mouse_pos[0], mouse_pos[1])
 
                             elif button.name == "Missle_Launcher":
-                                player.selectedButton = Missile_Launcher
+                                player.preview_tower = Missile_Launcher(mouse_pos[0], mouse_pos[1])
 
                             elif button.name == "UpgradeTower":
-                                print("Wybrano upgrade tower")
+                                if player.selectedTower is not None:
+                                    if player.selectedTower.level < 3:
+                                        if player.money >= player.selectedTower.upgrade_cost:
+                                            player.money -= player.selectedTower.upgrade_cost
+                                            player.selectedTower.upgrade()
+                                            player.trigger_notification("Wieża ulepszona!")
+                                        else:
+                                            player.trigger_notification("Brak pieniędzy!")
+                                    else:
+                                        player.trigger_notification("Maksymalny poziom!")
+                                else:
+                                    player.trigger_notification("Wybierz wieżę!")
 
                             elif button.name == "FastForward":
-                                print("Wybrano fast forward")
+                                player.is_fast_forward = not player.is_fast_forward
+                                if player.is_fast_forward:
+                                    player.trigger_notification("Przyspieszenie: WŁĄCZONE")
+                                else:
+                                    player.trigger_notification("Przyspieszenie: WYŁĄCZONE")
 
                             elif button.name == "Pause":
-                                print("Wybrano pause")
+                                player.is_paused = not player.is_paused
+                                if player.is_paused:
+                                    player.trigger_notification("Pauza: WŁĄCZONA")
+                                else:
+                                    player.trigger_notification("Pauza: WYŁĄCZONA")
+
+                            elif button.name == "StartWave":
+                                if not player.wave_in_progress and player.current_wave < len(waves_data):
+                                    player.wave_in_progress = True
+                                    player.enemies_to_spawn = waves_data[player.current_wave]["count"]
                             
                             break
                         
                     if not clickedOnPanel and mouse_pos[0] < 1200:
-                        if player.selectedButton is not None:
-                            towers.append(player.selectedButton(mouse_pos[0], mouse_pos[1]))
-                            player.selectedButton = None
+                        if player.preview_tower is not None:
+                            if player.money >= player.preview_tower.cost:
+                                player.money -= player.preview_tower.cost
+                                towers.append(player.preview_tower)
+                            
+                            player.preview_tower = None
+                            player.selectedTower = None
+                        else:
+                            # Próba zaznaczenia wieży
+                            clicked_tower = None
+                            for tower in towers:
+                                dist = math.hypot(tower.x_pos - mouse_pos[0], tower.y_pos - mouse_pos[1])
+                                if dist < 25: # promień podstawy wieży (ok. 25px)
+                                    clicked_tower = tower
+                                    break
+                            player.selectedTower = clicked_tower
     return True
 
 
@@ -73,10 +116,18 @@ def main():
         Button(1405, 392, 80, 90, "Missle_Launcher"),
         Button(1234, 502, 236, 54, "UpgradeTower"),
         Button(1247, 659, 100, 100, "FastForward"),
-        Button(1362, 659, 100, 100, "Pause")
+        Button(1362, 659, 100, 100, "Pause"),
+        Button(1234, 320, 236, 50, "StartWave")
     ]
 
-    enemies_count = 50
+    waves_data = [
+        {"count": 10, "health": 50, "speed": 2, "reward": 10},
+        {"count": 15, "health": 70, "speed": 2, "reward": 10},
+        {"count": 20, "health": 100, "speed": 3, "reward": 12},
+        {"count": 30, "health": 150, "speed": 3, "reward": 15},
+        {"count": 50, "health": 250, "speed": 4, "reward": 20}
+    ]
+
     enemies = []
     last_spawn = pygame.time.get_ticks()
 
@@ -85,26 +136,60 @@ def main():
 
     player = Player()
 
+    game_time = 0
+    last_real_time = pygame.time.get_ticks()
+
     while running:
 
-        current_time = pygame.time.get_ticks()
+        current_real_time = pygame.time.get_ticks()
+        delta_time = current_real_time - last_real_time
+        last_real_time = current_real_time
 
-        if enemies_count > 0 and current_time - last_spawn > 1000:
-            new_enemy = ClassicEnemy(enemy_path)
+        if player.is_paused:
+            delta_time = 0
+            speed_multiplier = 0
+        else:
+            if player.is_fast_forward:
+                delta_time *= 2
+            speed_multiplier = 2 if player.is_fast_forward else 1
+
+        game_time += delta_time
+        current_time = game_time
+
+        if player.wave_in_progress and player.enemies_to_spawn > 0 and current_time - last_spawn > 1000:
+            wave_info = waves_data[player.current_wave]
+            new_enemy = WaveEnemy(enemy_path, wave_info["speed"], wave_info["health"], wave_info["reward"])
             enemies.append(new_enemy)
 
-            enemies_count -= 1
+            player.enemies_to_spawn -= 1
             last_spawn = current_time
 
-        running = obslugaEventow(ui_Buttons, player, towers)
+        if player.wave_in_progress and player.enemies_to_spawn == 0 and len(enemies) == 0:
+            player.wave_in_progress = False
+            player.current_wave += 1
+            player.trigger_notification(f"Koniec fali {player.current_wave}!")
+
+        running = obslugaEventow(ui_Buttons, player, towers, waves_data)
 
         screen.blit(scaledBackground, (0, 0))
 
         for tower in towers:
             tower.draw(screen)
+            if tower == player.selectedTower:
+                # Rysowanie okręgu zasięgu dla zaznaczonej wieży
+                pygame.draw.circle(screen, (255, 255, 255), (tower.x_pos, tower.y_pos), tower.range, 1)
+
+        # Rysowanie podglądu wieży, jeśli jest wybrana
+        if player.preview_tower is not None:
+            mouse_pos = pygame.mouse.get_pos()
+            # Rysujemy podgląd tylko, jeśli celujemy na mapę (a nie na panel boczny)
+            if mouse_pos[0] < 1200:
+                player.preview_tower.draw(screen)
+                # Okrąg pokazujący zasięg podglądu
+                pygame.draw.circle(screen, (255, 255, 255), (player.preview_tower.x_pos, player.preview_tower.y_pos), player.preview_tower.range, 1)
 
         for enemy in enemies:
-            enemy.move_to_checkpoint()
+            enemy.move_to_checkpoint(speed_multiplier)
             enemy.draw(screen)
 
             if enemy.health <= 0:
@@ -115,9 +200,9 @@ def main():
                 enemies.remove(enemy)
 
         for tower in towers:
-            tower.attack(enemies, bullets)
+            tower.attack(enemies, bullets, current_time)
         for bullet in bullets:
-            bullet.update()
+            bullet.update(speed_multiplier)
             bullet.draw(screen)
             if bullet.hit == True:
                 bullets.remove(bullet)
@@ -127,10 +212,47 @@ def main():
         screen.blit(scaledPasekPrawo, (1200 , 0))
         player.draw_money(screen, (255, 255, 255))
         player.show_health(screen, (255, 255, 255))
-        
-        for btn in ui_Buttons:
-            btn.draw_debug(screen)
+        player.show_notification(screen, current_real_time)
 
+        # Wyświetlanie kosztów wież pod przyciskami (żółty kolor)
+        fontTowers = pygame.font.SysFont("Poppins", 20)
+        screen.blit(fontTowers.render("100$", True, (255, 215, 0)), (1240, 485))
+        screen.blit(fontTowers.render("150$", True, (255, 215, 0)), (1332, 485))
+        screen.blit(fontTowers.render("250$", True, (255, 215, 0)), (1425, 485))
+
+        # Dynamiczny tekst na przycisku ulepszenia
+        if player.selectedTower is not None:
+            if player.selectedTower.level < 3:
+                upg_text = f"Ulepsz: {player.selectedTower.upgrade_cost}$"
+            else:
+                upg_text = "MAX LVL"
+        else:
+            upg_text = "Wybierz wieze"
+
+        fontUpgrade = pygame.font.SysFont("Poppins", 25)
+        upg_img = fontUpgrade.render(upg_text, True, (255, 255, 255))
+        screen.blit(upg_img, (1290, 570))
+
+        # Tekst o aktualnej fali
+        wave_font = pygame.font.SysFont("Poppins", 30)
+        current_wave_display = min(player.current_wave + 1, len(waves_data))
+        wave_text = wave_font.render(f"Fala: {current_wave_display}/{len(waves_data)}", True, (255, 255, 255))
+        screen.blit(wave_text, (1310, 20))
+
+        # Tekst na przycisku startu fali
+        if player.current_wave >= len(waves_data):
+            start_btn_text = "Koniec Gry"
+            start_btn_color = (150, 150, 150)
+        elif player.wave_in_progress:
+            start_btn_text = "Fala Trwa..."
+            start_btn_color = (150, 150, 150)
+        else:
+            start_btn_text = "Start Fali"
+            start_btn_color = (255, 255, 255)
+            
+        start_img = fontUpgrade.render(start_btn_text, True, start_btn_color)
+        start_rect = start_img.get_rect(center=(1352, 345))
+        screen.blit(start_img, start_rect)
         (pygame.display.flip())
         clock.tick(60)
 

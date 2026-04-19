@@ -31,7 +31,7 @@ class Enemy:
         self.color = color
 
     # funkcja do przemieszczania sie przeciwnika
-    def move_to_checkpoint(self):
+    def move_to_checkpoint(self, speed_multiplier=1):
 
         if self.goal_index >= len(self.path):
             return True
@@ -42,13 +42,15 @@ class Enemy:
         dy = goal_y - self.y
         distance = math.hypot(dx, dy)
 
-        if distance <= self.speed:
+        effective_speed = self.speed * speed_multiplier
+
+        if distance <= effective_speed:
             self.x = goal_x
             self.y = goal_y
             self.goal_index += 1
         else:
-            self.x += (dx / distance) * self.speed
-            self.y += (dy / distance) * self.speed
+            self.x += (dx / distance) * effective_speed
+            self.y += (dy / distance) * effective_speed
 
         return False
 
@@ -82,3 +84,7 @@ class Enemy:
 class ClassicEnemy(Enemy):
     def __init__(self, path):
         super().__init__(path, speed = 3, health = 70, reward = 10, width = 20, height = 20, color ="black")
+
+class WaveEnemy(Enemy):
+    def __init__(self, path, speed, health, reward):
+        super().__init__(path, speed = speed, health = health, reward = reward, width = 20, height = 20, color = "black")
