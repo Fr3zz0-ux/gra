@@ -15,6 +15,8 @@ def obslugaEventow(ui_Buttons, player, towers, waves_data):
                     player.preview_tower.update_position(event.pos[0], event.pos[1])
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                print(event.pos)
+                
                 if event.button == 3: # Prawy przycisk myszy - anulowanie
                     player.preview_tower = None
                 elif event.button == 1: # Tylko lewy przycisk myszy
@@ -203,6 +205,8 @@ def main():
             elif enemy.goal_index >= len(enemy.path):
                 player.lose_health(10)
                 enemies.remove(enemy)
+                if player.health <= 0:
+                    running = False
 
         for tower in towers:
             tower.attack(enemies, bullets, current_time)
@@ -211,7 +215,6 @@ def main():
             bullet.draw(screen)
             if bullet.hit == True:
                 bullets.remove(bullet)
-
 
         # Panel boczny
         screen.blit(scaledPasekPrawo, (1200 , 0))
@@ -263,6 +266,31 @@ def main():
         screen.blit(start_img, start_rect)
         (pygame.display.flip())
         clock.tick(60)
+
+
+        # ekran konca gry
+        if player.health <= 0:
+            screen.fill((0, 0, 0))
+            font = pygame.font.SysFont("Poppins", 100)
+            img = font.render("PRZEGRALES", True, (255, 0, 0))
+            text_rect = img.get_rect(center=(750, 400))
+            screen.blit(img, text_rect)
+            pygame.display.flip()
+            pygame.time.wait(3000)
+            running = False
+
+        #ekran wygranej
+        elif player.current_wave >= len(waves_data) and len(player.active_waves) == 0 and len(enemies) == 0:
+            screen.fill((0, 0, 0))
+            font = pygame.font.SysFont("Poppins", 100)
+            img = font.render("WYGRALES!", True, (0, 255, 0))
+            text_rect = img.get_rect(center=(750, 400))
+            screen.blit(img, text_rect)
+            pygame.display.flip()
+            pygame.time.wait(3000)
+            running = False
+
+    
 
     pygame.quit()
 

@@ -65,10 +65,12 @@ class Tower:
             try:
                 self.original_top = pygame.image.load(new_asset_path)
                 self.scaled_top = pygame.transform.scale(self.original_top, (self.scale_x, self.scale_y))
-                # Aktualizujemy top_image, żeby od razu było widać zmianę
+                # Aktualizujemy top_image i top_rect do bieżącej pozycji wieży
                 self.top_image = self.scaled_top
+                self.top_rect = self.top_image.get_rect(center=(self.x_pos, self.y_pos - 15))
             except:
                 print(f"Brak grafiki dla poziomu {self.level}: {new_asset_path}")
+                self.top_rect = self.top_image.get_rect(center=(self.x_pos, self.y_pos - 15))
 
             # Zwiększamy koszt kolejnego ulepszenia
             self.upgrade_cost = int(self.upgrade_cost * 2)

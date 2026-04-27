@@ -45,7 +45,7 @@ class Player:
 
     def show_notification(self, screen, current_time):
         if self.notification_msg and current_time - self.notification_time < 2000:
-            font = pygame.font.SysFont("Poppins", 20)
+            font = pygame.font.SysFont("Poppins", 60)
             img = font.render(self.notification_msg, True, (255, 0, 0))
             # Wyświetlamy powiadomienia na samym dole panelu bocznego, aby nie nakładały się na nic innego
-            screen.blit(img, [1210, 770])
+            screen.blit(img, [300, 200])
