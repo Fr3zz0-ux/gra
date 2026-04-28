@@ -101,7 +101,7 @@ def main():
     missle_launcher_on = pygame.transform.smoothscale(missle_launcher_on, (80, 90))
 
     ulepszenie_on = pygame.image.load('Assets/ulepsz_on.png')
-    ulepszenie_on = pygame.transform.smoothscale(ulepszenie_on, (273, 60))
+    ulepszenie_on = pygame.transform.smoothscale(ulepszenie_on, (273, 67))
 
     enemy_path = [(7, 780), (48, 756), (91, 733), (151, 714), (192, 691), (234, 676), (275, 661), (316, 642), (351, 606), (347, 562), (310, 534), (281, 505), (270, 476), (279, 447), (300, 424), (330, 412),
      (361, 398), (397, 392), (440, 388), (482, 399), (526, 412), (561, 440), (598, 476), (628, 507), (661, 540), (683, 557), (721, 585), (762, 606), (804, 630), (862, 645), (929, 649), (983, 644), (1036, 621),
@@ -232,7 +232,7 @@ def main():
         
         # Rysowanie podświetlenia ulepszenia
         if player.selectedTower is not None:
-            screen.blit(ulepszenie_on, (1217, 503))
+            screen.blit(ulepszenie_on, (1217, 502))
 
         # Wyświetlanie kosztów wież pod przyciskami (żółty kolor)
         fontTowers = pygame.font.SysFont("Poppins", 20)
