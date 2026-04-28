@@ -28,13 +28,13 @@ def obslugaEventow(ui_Buttons, player, towers, waves_data):
                         if button.is_clicked(mouse_pos):
                             clickedOnPanel = True
 
-                            if button.name == "Cannon":
+                            if button.name == "Cannon" and player.money >= 100:
                                 player.preview_tower = Cannon(mouse_pos[0], mouse_pos[1])
 
-                            elif button.name == "Machinegun":
+                            elif button.name == "Machinegun" and player.money >= 150:
                                 player.preview_tower = Machinegun(mouse_pos[0], mouse_pos[1])
 
-                            elif button.name == "Missle_Launcher":
+                            elif button.name == "Missle_Launcher" and player.money >= 200:
                                 player.preview_tower = Missile_Launcher(mouse_pos[0], mouse_pos[1])
 
                             elif button.name == "UpgradeTower":
@@ -43,42 +43,9 @@ def obslugaEventow(ui_Buttons, player, towers, waves_data):
                                         if player.money >= player.selectedTower.upgrade_cost:
                                             player.money -= player.selectedTower.upgrade_cost
                                             player.selectedTower.upgrade()
-                                            player.trigger_notification("Wieża ulepszona!")
-                                        else:
-                                            player.trigger_notification("Brak pieniędzy!")
-                                    else:
-                                        player.trigger_notification("Maksymalny poziom!")
-                                else:
-                                    player.trigger_notification("Wybierz wieżę!")
 
                             elif button.name == "FastForward":
                                 player.is_fast_forward = not player.is_fast_forward
-                                if player.is_fast_forward:
-                                    player.trigger_notification("Przyspieszenie: WŁĄCZONE")
-                                else:
-                                    player.trigger_notification("Przyspieszenie: WYŁĄCZONE")
-
-                            elif button.name == "Pause":
-                                player.is_paused = not player.is_paused
-                                if player.is_paused:
-                                    player.trigger_notification("Pauza: WŁĄCZONA")
-                                else:
-                                    player.trigger_notification("Pauza: WYŁĄCZONA")
-
-                            elif button.name == "StartWave":
-                                if len(player.active_waves) < 2:
-                                    if player.current_wave < len(waves_data):
-                                        wave_info = waves_data[player.current_wave]
-                                        player.active_waves.append({
-                                            "info": wave_info,
-                                            "remaining": wave_info["count"],
-                                            "last_spawn": 0
-                                        })
-                                        player.current_wave += 1
-                                        player.trigger_notification(f"Fala {player.current_wave} nadeszla!")
-                                else:
-                                    player.trigger_notification("Max 2 aktywne fale!")
-                            
                             break
                         
                     if not clickedOnPanel and mouse_pos[0] < 1200:
@@ -116,6 +83,26 @@ def main():
     pasekPrawo = pygame.image.load('Assets/pasek_prawy.png')
     scaledPasekPrawo = pygame.transform.smoothscale(pasekPrawo, (300, 800))
 
+    # Przyciski Fast Forward
+    ff_off_img = pygame.image.load('Assets/ff_off.png')
+    ff_off_img = pygame.transform.smoothscale(ff_off_img, (220, 100))
+    ff_on_img = pygame.image.load('Assets/ff_on.png')
+    ff_on_img = pygame.transform.smoothscale(ff_on_img, (220, 100))
+
+
+    # Przyciski zaznaczone
+    cannon_on = pygame.image.load('Assets/Cannon_on.png')
+    cannon_on = pygame.transform.smoothscale(cannon_on, (80, 90))
+
+    machinegun_on = pygame.image.load('Assets/mg_on.png')
+    machinegun_on = pygame.transform.smoothscale(machinegun_on, (80, 90))
+
+    missle_launcher_on = pygame.image.load('Assets/Missle_Launcher_on.png')
+    missle_launcher_on = pygame.transform.smoothscale(missle_launcher_on, (80, 90))
+
+    ulepszenie_on = pygame.image.load('Assets/ulepsz_on.png')
+    ulepszenie_on = pygame.transform.smoothscale(ulepszenie_on, (273, 60))
+
     enemy_path = [(7, 780), (48, 756), (91, 733), (151, 714), (192, 691), (234, 676), (275, 661), (316, 642), (351, 606), (347, 562), (310, 534), (281, 505), (270, 476), (279, 447), (300, 424), (330, 412),
      (361, 398), (397, 392), (440, 388), (482, 399), (526, 412), (561, 440), (598, 476), (628, 507), (661, 540), (683, 557), (721, 585), (762, 606), (804, 630), (862, 645), (929, 649), (983, 644), (1036, 621),
       (1057, 597), (1073, 568), (1078, 530), (1054, 497), (1021, 480), (982, 468), (932, 453), (892, 440), (866, 423), (846, 400), (845, 374), (868, 348), (911, 333), (952, 318), (985, 315), (1014, 301),
@@ -126,9 +113,7 @@ def main():
         Button(1312, 392, 80, 90, "Machinegun"),
         Button(1405, 392, 80, 90, "Missle_Launcher"),
         Button(1234, 502, 236, 54, "UpgradeTower"),
-        Button(1247, 659, 100, 100, "FastForward"),
-        Button(1362, 659, 100, 100, "Pause"),
-        Button(1234, 320, 236, 50, "StartWave")
+        Button(1243, 663, 220, 100, "FastForward")
     ]
 
     waves_data = [
@@ -166,6 +151,17 @@ def main():
 
         game_time += delta_time
         current_time = game_time
+
+        # Automatyczne uruchamianie nowej fali
+        if len(player.active_waves) == 0 and len(enemies) <= 3:
+            if player.current_wave < len(waves_data):
+                wave_info = waves_data[player.current_wave]
+                player.active_waves.append({
+                    "info": wave_info,
+                    "remaining": wave_info["count"],
+                    "last_spawn": current_time
+                })
+                player.current_wave += 1
 
         for wave in player.active_waves[:]:
             if wave["remaining"] > 0 and current_time - wave["last_spawn"] > 1000:
@@ -222,6 +218,22 @@ def main():
         player.show_health(screen, (255, 255, 255))
         player.show_notification(screen, current_real_time)
 
+        # Rysowanie podświetlenia Cannon
+        if isinstance(player.preview_tower, Cannon):
+            screen.blit(cannon_on, (1218, 397))
+
+        # Rysowanie podświetlenia Machinegun
+        if isinstance(player.preview_tower, Machinegun):
+            screen.blit(machinegun_on, (1312, 400))
+
+        # Rysowanie podświetlenia Missile_Launcher
+        if isinstance(player.preview_tower, Missile_Launcher):
+            screen.blit(missle_launcher_on, (1406, 400))
+        
+        # Rysowanie podświetlenia ulepszenia
+        if player.selectedTower is not None:
+            screen.blit(ulepszenie_on, (1217, 503))
+
         # Wyświetlanie kosztów wież pod przyciskami (żółty kolor)
         fontTowers = pygame.font.SysFont("Poppins", 20)
         screen.blit(fontTowers.render("100$", True, (255, 215, 0)), (1240, 485))
@@ -246,26 +258,15 @@ def main():
         wave_text = wave_font.render(f"Fala: {player.current_wave}/{len(waves_data)}", True, (255, 255, 255))
         screen.blit(wave_text, (1310, 20))
 
-        # Tekst na przycisku startu fali
-        if player.current_wave >= len(waves_data):
-            start_btn_text = "Koniec Fal"
-            start_btn_color = (150, 150, 150)
+
+        # Rysowanie przycisku FastForward z grafiki
+        if player.is_fast_forward:
+            screen.blit(ff_on_img, (1243, 663))
         else:
-            if len(player.active_waves) >= 2:
-                start_btn_text = "Max Fal"
-                start_btn_color = (150, 150, 150)
-            elif len(player.active_waves) > 0:
-                start_btn_text = "Dodaj Falę"
-                start_btn_color = (255, 255, 255)
-            else:
-                start_btn_text = "Start Fali"
-                start_btn_color = (255, 255, 255)
-            
-        start_img = fontUpgrade.render(start_btn_text, True, start_btn_color)
-        start_rect = start_img.get_rect(center=(1352, 345))
-        screen.blit(start_img, start_rect)
+            screen.blit(ff_off_img, (1243, 663))
+
         (pygame.display.flip())
-        clock.tick(60)
+        clock.tick(60)    
 
 
         # ekran konca gry
